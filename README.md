@@ -142,28 +142,11 @@ flowchart LR
 ```text
 .
 ├── README.md
-├── docs/
-│   ├── Vault_Day1_Study_Guide.pdf
-│   ├── Vault_Day2_Study_Guide.pdf
-│   ├── Vault_Day3_Study_Guide.pdf
-│   ├── Vault_Lab_Guide_Day1_Day2.pdf
-│   └── Vault_Lab_Guide_Day3.pdf
-└── labs/
-    ├── day1/          # policies, systemd config, Shamir demo, day1-lab.sh, app.py
-    ├── day2/          # database/AppRole/Agent configs, k8s manifests, CI workflow, day2-lab.sh
-    └── day3/
-        ├── pki/           # Lab 3.1
-        ├── transit/       # Lab 3.2 (orders-app.hcl)
-        ├── seal/          # Lab 3.3 (autounseal.hcl, seal.hcl)
-        ├── agent/         # Lab 3.4 (agent.hcl, agent-exec.hcl, *.ctmpl)
-        ├── raft-cluster.sh            # Labs 3.5 and 3.8
-        ├── mon/           # Lab 3.6 (telemetry.hcl, prometheus.yml)
-        ├── breakfix/      # Lab 3.7
-        ├── tf/            # Lab 3.8 Terraform (versions.tf, main.tf, policies/)
-        ├── ansible/       # Lab 3.8 (vault-ops.yml, issue-cert.yml)
-        ├── k8s/           # Lab 3.9 (vault-ha-kind.yaml, webapp-agent.yaml, webapp-vso.yaml)
-        └── capstone/      # Lab 3.10 (capstone-vault.sh, agent-capstone.hcl, nginx.conf, orders.py)
-```
+├── Vault_Day1_Study_Guide.pdf
+├── Vault_Day2_Study_Guide.pdf
+├── Vault_Day3_Study_Guide.pdf
+├── Vault_Lab_Guide_Day1_Day2.pdf
+├── Vault_Lab_Guide_Day3.pdf
 
 > The PDFs are the source of truth. Every file under `labs/` appears in full in the lab guide, at the step that uses it.
 
