@@ -147,6 +147,7 @@ flowchart LR
 ├── Vault_Day3_Study_Guide.pdf
 ├── Vault_Lab_Guide_Day1_Day2.pdf
 ├── Vault_Lab_Guide_Day3.pdf
+├── Vault_Capstone_Project_Guide.pdf
 
 > The PDFs are the source of truth. Every file under `labs/` appears in full in the lab guide, at the step that uses it.
 
