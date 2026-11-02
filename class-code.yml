@@ -105,6 +105,16 @@ vault server -config="vault.hcl"
    38  history
 
 
+
+61  export VAULT_ADDR="http://127.0.0.1:8200"
+   62  unset VAULT_TOKEN
+   63  vault token lookup
+   64  vault login
+   65  vault operator init -key-shares=5 -key-threshold=3
+   66  vault login
+   67  vault token lookup
+
+
   67  vault token lookup
    68  vault secret enable -path=foundation kv-v2
    69  vault secrets enable -path=foundation kv-v2
