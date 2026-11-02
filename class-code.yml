@@ -21,3 +21,20 @@ ubuntu@ip-172-31-23-11:~/vault-lab$ history
    20  pwd
    21  history
 ubuntu@ip-172-31-23-11:~/vault-lab$
+
+
+
+vault server -dev -dev-root-token-id="lab-root-token" -dev-listen-address="127.0.0.1:8200"
+
+
+ubuntu@ip-172-31-23-11:~$ history
+    1  export VAULT_ADDR="http://127.0.0.1:8200"
+    2  export VAULT_TOKEN="lab-root-token"
+    3  vault status
+    4  vault kv put -mount=secret demo/app username="appuser" password="DemoPassword1"
+    5  vault kv get -mount=secret demo/app
+    6  vault kv get -mount=secret -field=password demo/app
+    7  history
+
+
+
