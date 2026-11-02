@@ -103,3 +103,18 @@ vault server -config="vault.hcl"
    36  export VAULT_TOKEN=$(jq -r '.root_token' init.json)
    37  echo VAULT_TOKEN
    38  history
+
+
+  67  vault token lookup
+   68  vault secret enable -path=foundation kv-v2
+   69  vault secrets enable -path=foundation kv-v2
+   70  vault kv put -mount=foundation app/confid username="demo" password="Password@123"
+   71  vault kv get -mount=foundation app/confid
+   72  vault operator seal
+   73  vault status
+   74  vault kv get -mount=foundation app/confid
+   75  vault operator unseal
+   77  vault kv get -mount=foundation app/confid
+   78  vault operator seal
+   79  vault kv get -mount=foundation app/confid
+   80  history
