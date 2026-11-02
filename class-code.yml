@@ -57,5 +57,5 @@ ubuntu@ip-172-31-23-11:~$
    17  VAULT_TOKEN="$DEMO_TOKEN" vault kv put -mount=secret demo/app password="Changed"
    18  vault token revoke "$DEMO_TOKEN"
    19  VAULT_TOKEN="$DEMO_TOKEN" vault kv get -mount=secret demo/app
-   20  unset DEMO_TAKEN
+   20  unset DEMO_TOKEN
    21  history
