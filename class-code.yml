@@ -39,7 +39,7 @@ ubuntu@ip-172-31-23-11:~$ history
 
 
 
-cd vault-demo
+cd vault-lab/
    6  nano demo-read.hcl
 
 ubuntu@ip-172-31-23-11:~$ cat vault-lab/demo-read.hcl
