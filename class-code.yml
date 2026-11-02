@@ -128,3 +128,19 @@ vault server -config="vault.hcl"
    78  vault operator seal
    79  vault kv get -mount=foundation app/confid
    80  history
+
+
+ 52  export VAULT_ADDR="http://127.0.0.1:8200"
+   53  vault status
+   54  vault kv get -mount=foundation app/confid
+   55  vault operator unseal
+   56  vault kv get -mount=foundation app/confid
+   57  echo "$VAULT_ADDR"
+   58  vault token lookup
+   59  vault status
+   60  vault secrets list
+   61  vault auth list
+   62  vault kv put -mount=foundation walkthrough/app username="webapp" password="WalkthroughPassword1"
+   63  vault kv get -mount=foundation walkthrough/app
+   64  vault kv get -format=json -mount=foundation walkthrough/app | jq
+   65  curl -sS "$VAULT_ADDR/v1/sys/health" | jq
