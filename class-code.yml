@@ -59,3 +59,47 @@ ubuntu@ip-172-31-23-11:~$
    19  VAULT_TOKEN="$DEMO_TOKEN" vault kv get -mount=secret demo/app
    20  unset DEMO_TOKEN
    21  history
+
+
+
+
+mkdir vault-lab/raft-data
+
+ubuntu@ip-172-31-23-11:~/vault-lab$ cat vault.hcl
+ui = true
+disable_mlock=true
+
+storage "raft" {
+        path = "$HOME/vault-lab/raft-data"
+        node_id = "vault-lab-1"
+}
+
+listener "tcp" {
+        address = "127.0.0.1:8200"
+        cluster_address = "127.0.0.1:8201"
+        tls_disable = true
+}
+
+api_addr = "http://127.0.0.1:8200"
+cluster_addr = "http://127.0.0.1:8201"
+
+
+sudo ss -ltnp | grep ':8200'
+
+ubuntu@ip-172-31-23-11:~/vault-lab$ sudo ss -ltnp | grep ':8200'
+LISTEN 0      4096       127.0.0.1:8200      0.0.0.0:*    users:(("vault",pid=2574,fd=8))
+ubuntu@ip-172-31-23-11:~/vault-lab$ kill -9 2574
+
+vault server -config="vault.hcl"
+
+
+ 29  umask 077
+   30  vault operator init -key-shares=5 -key-threshold=3 -format=json > vault-lab/init.json
+   31  cd vault-lab/
+   32  ll
+   33  cat init.json
+   34  jq . init.json
+   35  vault operator unseal
+   36  export VAULT_TOKEN=$(jq -r '.root_token' init.json)
+   37  echo VAULT_TOKEN
+   38  history
