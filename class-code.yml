@@ -144,3 +144,25 @@ vault server -config="vault.hcl"
    63  vault kv get -mount=foundation walkthrough/app
    64  vault kv get -format=json -mount=foundation walkthrough/app | jq
    65  curl -sS "$VAULT_ADDR/v1/sys/health" | jq
+
+
+71  vault kv get -mount=foundation walkthrough/app
+   72  http://127.0.0.1:8200
+   73  lsb_release -a
+   74  sudo apt update
+   75  sudo apt upgrade -y
+   76  sudo apt install -y xfce4 xfce4-goodies
+   77  sudo apt install -y xrdp xorgxrdp
+   78  sudo systemctl enable --now xrdp
+   79  sudo usermod -aG ssl-cert xrdp
+   80  echo "xfce4-session" > ~/.xsession
+   81  chmod 644 ~/.xsession
+   82  sudo systemctl restart xrdp
+   83  sudo passwd ubuntu
+   84  ssl -L 18200:127.0.0.1:8200 ubuntu@100.52.236.80
+   85  sudo apt-get install ssl
+   86  sudo apt-get ssl
+   87  history
+   88  sudo apt-get install -y openssl
+   89  ssl -L 18200:127.0.0.1:8200 ubuntu@100.52.236.80
+   90  history
