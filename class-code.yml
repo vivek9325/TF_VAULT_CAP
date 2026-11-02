@@ -37,18 +37,25 @@ ubuntu@ip-172-31-23-11:~$ history
     7  history
 
 
+
+
+cd vault-demo
+   6  nano demo-read.hcl
+
 ubuntu@ip-172-31-23-11:~$ cat vault-lab/demo-read.hcl
 path "secret/data/demo/app" {
         capabilities = ["read"]
 }
 ubuntu@ip-172-31-23-11:~$
 
-
-  1  export VAULT_ADDR="http://127.0.0.1:8200"
-    2  export VAULT_TOKEN="lab-root-token"
-    3  vault status
-    4  vault kv put -mount=secret demo/app username="appuser" password="DemoPassword1"
-    5  vault kv get -mount=secret demo/app
-    6  vault kv get -mount=secret -field=password demo/app
-    7  history
-
+   10  export VAULT_ADDR='http://127.0.0.1:8200'
+   11  vault status
+   12  vault policy write demo-read demo-read.hcl
+   13  vault policy list
+   15  DEMO_TOKEN=$(vault token create -policy=demo-read -no-default-policy -ttl=10m -field=token)
+   16  VAULT_TOKEN="$DEMO_TOKEN" vault kv get -mount=secret demo/app
+   17  VAULT_TOKEN="$DEMO_TOKEN" vault kv put -mount=secret demo/app password="Changed"
+   18  vault token revoke "$DEMO_TOKEN"
+   19  VAULT_TOKEN="$DEMO_TOKEN" vault kv get -mount=secret demo/app
+   20  unset DEMO_TAKEN
+   21  history
