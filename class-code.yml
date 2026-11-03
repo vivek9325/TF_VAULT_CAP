@@ -221,3 +221,27 @@ SQL
   222  cat readonly.sql
   223  history
 
+
+
+
+ubuntu@ip-172-31-23-11:~/vault-lab$ cat db-reader.hcl
+path "database/creds/readonly" {
+        capabilities = ["read"]
+}
+
+
+ 215  vault policy write db-reader db-reader.hcl
+  216  APP_TOKEN=$(vault token create -policy=db-reader -ttl=20m -field=token)
+  217  vault token capabilities "$APP_TOKEN" database/creds/readonly
+  218  vault token capabilities "$APP_TOKEN" database/config/local-postgres
+  219  vault token=$APP_TOKEN"
+vault read database/creds/readonly
+
+  220  VAULT_TOKEN="$APP_TOKEN"   vault read database/creds/readonly
+  221  VAULT_TOKEN="$APP_TOKEN"   vault read database/config/local-postgres
+  222  VAULT_TOKEN="$APP_TOKEN"   vault kv get -mount=foundation finance/payroll
+  223  vault token revoke "$APP_TOKEN"
+  224  unset APP_TOKEN
+  225  history
+
+
