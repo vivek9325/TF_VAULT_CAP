@@ -264,3 +264,22 @@ vault read database/creds/readonly
   269  vault token revoke "$APPROLE_TOKEN"
   270  unset APPROLE_TOKEN SECRET_ID
   271  history
+
+
+
+
+309  export VAULT_ADDR="http://127.0.0.1:8200"
+  310  vault read -format=json database/creds/readonly > lease-test-1.json
+  311  LEASEID=$(jq -r '.lease_id' lease-test-1.json
+)
+  312  LEASE_USER=$(jq -r '.data.username' lease-test-1.json)
+  313  LEASE_PASS=$(jq -r '.data.password' lease-test-1.json)
+  314  PGPASSWORD="$LEASE_PASS" psql -h 127.0.0.1 -U "$LEASE_USER" -d training -c "SELECT current_user;"
+  315  vault lease lookup "$LEASEID"
+  316  vault lease renew -increment=10m "$LEASEID"
+  317  PGPASSWORD="$LEASE_PASS" psql -h 127.0.0.1 -U "$LEASE_USER" -d training -c "SELECT current_user;"
+  318  vault lease lookup "$LEASEID"
+  319  vault lease revoke "$LEASEID"
+  320  PGPASSWORD="$LEASE_PASS" psql -h 127.0.0.1 -U "$LEASE_USER" -d training -c "SELECT current_user;"
+  321  history
+ubuntu@ip-172-31-23-11:~$
