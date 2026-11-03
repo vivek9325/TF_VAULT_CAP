@@ -198,6 +198,19 @@ SQL
   210  history
 
 
+
+
+
+
+
+ 209  cat > readonly.sql <<'SQL'
+CREATE ROLE "{{name}}" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}';
+GRANT CONNECT ON DATABASE training TO "{{name}}";
+GRANT USAGE ON SCHEMA public TO "{{name}}";
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO "{{name}}";
+SQL
+
+
    212  vault write database/roles/readonly db_name="local-postgres" creation_statement=@readonly.sql default_ttl="5m" max_ttl="30m"
   213  vault read -format=json database/creds/readonly > db-creds.json
   214  vault read database/roles/readonly
