@@ -196,3 +196,18 @@ SQL
   208  export VAULT_ADDR="http://127.0.0.1:8200"
   209  vault secrets enable database
   210  history
+
+
+   212  vault write database/roles/readonly db_name="local-postgres" creation_statement=@readonly.sql default_ttl="5m" max_ttl="30m"
+  213  vault read -format=json database/creds/readonly > db-creds.json
+  214  vault read database/roles/readonly
+  215  vault write database/roles/readonly db_name="local-postgres" creation_statements=@readonly.sql default_ttl="5m" max_ttl="30m"
+  216  vault read database/roles/readonly
+  217  vault read -format=json database/creds/readonly > db-creds.json
+  218  ll
+  219  cat db-creds.json
+  220  PGPASSWORD="-6BpEdn3zjxUco6KqSf-" psql -h 127.0.0.1 -U "v-root-readonly-20qykrKsvSfqDr8ipMjE-1793682786" -d training -c "SELECT * FROM public.products;"
+  221  PGPASSWORD="-6BpEdn3zjxUco6KqSf-" psql -h 127.0.0.1 -U "v-root-readonly-20qykrKsvSfqDr8ipMjE-1793682786" -d training -c "INSERT INTO public.products VALUES (3, 'Monitor');"
+  222  cat readonly.sql
+  223  history
+
