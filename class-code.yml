@@ -223,6 +223,10 @@ SQL
 
 
 
+  205  export VAULT_ADDR="http://127.0.0.1:8200"
+  206  vault kv put -mount=foundation finance/payroll example="restricted-data"
+  207  ll
+
 
 ubuntu@ip-172-31-23-11:~/vault-lab$ cat db-reader.hcl
 path "database/creds/readonly" {
