@@ -179,7 +179,7 @@ CREATE DATABASE training;
 SQL
 
   203  sudo -u postgres psql -d training <<'SQL'
-CREATE TABLE public.products (id integar PRIMARY KEY, name text NOT NULL);
+CREATE TABLE public.products (id integer PRIMARY KEY, name text NOT NULL);
 INSERT INTO public.products VALUES (1, 'Keyboard'), (2, 'Mouse');
 REVOKE CREATE ON SCHEMA public FROM PUBLIC;
 SQL
