@@ -312,3 +312,21 @@ ubuntu@ip-172-31-23-11:~$
   324  VAULT_TOKEN="$WRAPPED_APP_TOKEN" vault read database/creds/readonly
   325  history
 
+
+
+
+ 327  TOKEN_A=$(vault token create -ttl=15m -field=token)
+  328  TOKEN_B=$(vault token create -ttl=15m -field=token)
+  329  VAULT_TOKEN="$TOKEN_A" vault write cubbyhole/training message="Only token A can sees this"
+  330  VAULT_TOKEN="$TOKEN_A" vault read cubbyhole/training
+  331  VAULT_TOKEN="$TOKEN_B" vault read cubbyhole/training
+  332  VAULT_TOKEN="$TOKEN_B" vault write cubbyhole/training message="Only token B can sees this"
+  333  VAULT_TOKEN="$TOKEN_B" vault read cubbyhole/training
+  334  VAULT_TOKEN="$TOKEN_A" vault read cubbyhole/training
+  335  vault token revoke "$TOKEN_A"
+  336  vault token revoke "$TOKEN_B"
+  337  vault token revoke "$WRAPPED_APP_TOKEN"
+  338  unset TOKEN_A TOKEN_B WRAPPED_APP_TOKEN
+  339  unset WRAPPED_SECRET_ID WRAPPED_APP_TOKEN
+  340  history
+
