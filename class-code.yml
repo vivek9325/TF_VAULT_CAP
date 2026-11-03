@@ -149,6 +149,9 @@ vault server -config="vault.hcl"
 71  vault kv get -mount=foundation walkthrough/app
    72  http://127.0.0.1:8200
    73  lsb_release -a
+   
+   
+   
    74  sudo apt update
    75  sudo apt upgrade -y
    76  sudo apt install -y xfce4 xfce4-goodies
@@ -159,10 +162,37 @@ vault server -config="vault.hcl"
    81  chmod 644 ~/.xsession
    82  sudo systemctl restart xrdp
    83  sudo passwd ubuntu
-   84  ssl -L 18200:127.0.0.1:8200 ubuntu@100.52.236.80
-   85  sudo apt-get install ssl
-   86  sudo apt-get ssl
-   87  history
-   88  sudo apt-get install -y openssl
-   89  ssl -L 18200:127.0.0.1:8200 ubuntu@100.52.236.80
-   90  history
+  
+
+========================================================================================================================================================================================
+
+Day - 2 
+
+
+ 198  sudo apt-get update
+  199  sudo apt-get install -y postgresql postgresql-client
+  200  sudo systemctl enable --now postgresql
+  201  sudo -u postgres psql -c "SELECT version();"
+  202  sudo -u postgres psql <<'SQL'
+CREATE ROLE vaultadmin WITH LOGIN SUPERUSER PASSWORD 'vaultDbAdmin123';
+CREATE DATABASE training;
+SQL
+
+  203  sudo -u postgres psql -d training <<'SQL'
+CREATE TABLE public.products (id integar PRIMARY KEY, name text NOT NULL);
+INSERT INTO public.products VALUES (1, 'Keyboard'), (2, 'Mouse');
+REVOKE CREATE ON SCHEMA public FROM PUBLIC;
+SQL
+
+  204  sudo -u postgres psql -d training <<'SQL'
+CREATE TABLE public.products (id integer PRIMARY KEY, name text NOT NULL);
+INSERT INTO public.products VALUES (1, 'Keyboard'), (2, 'Mouse');
+REVOKE CREATE ON SCHEMA public FROM PUBLIC;
+SQL
+
+  205  sudo -u postgres psql -d training -c "SELECT * FROM public.products;"
+  206  PASSWORD="vaultDbAdmin123" psql -h 127.0.0.1 -U vaultadmin -d training -c "SELECT current_user;"
+  207  vault secrets enable database
+  208  export VAULT_ADDR="http://127.0.0.1:8200"
+  209  vault secrets enable database
+  210  history
