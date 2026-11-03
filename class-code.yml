@@ -249,3 +249,18 @@ vault read database/creds/readonly
   225  history
 
 
+
+
+ 259  export VAULT_ADDR="http://127.0.0.1:8200"
+  260  vault auth enable approle
+  261  vault write auth/approle/role/training-app token_policies="db-reader" token_ttl="10m" token_max_ttl="30m" secret_id_ttl="10m" secret_id_num_uses=1
+  262  ROLE_ID=$(vault read -field=role_id auth/approle/role/training-app/role-id)
+  263  SECRET_ID=$(vault write -f -field=secret_id auth/approle/role/training-app/secret-id)
+  264  APPROLE_TOKEN=$(vault write -field=token auth/approle/login role_id="$ROLE_ID" secret_id="$SECRET_ID")
+  265  VAULT_TOKEN="$APPROLE_TOKEN" vault read database/creds/readonly
+  266  VAULT_TOKEN="$APPROLE_TOKEN" vault read database/config/local-postgres
+  267  vault write auth/approle/login role_id="$ROLE_ID" secret_id="$SECRET_ID"
+  268  VAULT_TOKEN="$APPROLE_TOKEN" vault read database/creds/readonly
+  269  vault token revoke "$APPROLE_TOKEN"
+  270  unset APPROLE_TOKEN SECRET_ID
+  271  history
