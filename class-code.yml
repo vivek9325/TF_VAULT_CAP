@@ -373,3 +373,24 @@ ubuntu@ip-172-31-23-11:~$
   414  cat intermediate-chain.pem
   415  vault write pki-int/intermediate/set-signed certificate=@intermediate-chain.pem
   416  history
+
+
+
+417  vault write pki-int/roles/training-web allowed_domains="lab.example" allowed_subdomains=true allow_bare_domains=false allow_ip_sans=false server_flag=true client_flag=false mx_ttl="24h"
+  418  vault write pki-int/roles/training-web allowed_domains="lab.example" allowed_subdomains=true allow_bare_domains=false allow_ip_sans=false server_flag=true client_flag=false max_ttl="24h"
+  419  vault write -format=json pki-int/issue/training-web common_name="app.lab.example" ttl="1h" > app-certificate.json
+  420  export VAULT_ADDR="http://127.0.0.1:8200"
+  421  vault write -format=json pki-int/issue/training-web common_name="app.lab.example" ttl="1h" > app-certificate.json
+  422  vault write pki-int/roles/training-web   allowed_domains="lab.example"   allow_subdomains=true   allow_bare_domains=false   allow_ip_sans=false   server_flag=true   client_flag=false   max_ttl="24h"
+  423  vault write -format=json   pki-int/issue/training-web   common_name="app.lab.example"   ttl="1h"   > app-certificate.json
+  424  cat app-certificate.json
+  425  jq -r '.data.certificate' app-certificate.json > app.pem
+  426  jq -r '.data.private_key' app-certificate.json > app-key.pem
+  427  jq -r '.data.issuing_ca' app-certificate.json > issuing-ca.pem
+  428  chmod 600 app-key.pem app-certificate.json
+  429  ll
+  430  openssl x509 -in app.pem -noout -subject -issuer -dates
+  431  openssl verify -CAfile root-ca.pem -untrusted issuing-ca.pem -verify_hostname app.lab.example app.pem
+  432  openssl verify -CAfile root-ca.pem -untrusted issuing-ca.pem -verify_hostname app.lab.example123 app.pem
+  433  history
+ubuntu@ip-172-31-23-11:~/vault-lab/day3$
