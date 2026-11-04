@@ -413,3 +413,35 @@ ubuntu@ip-172-31-23-11:~/vault-lab/day3$
   409  CIPHERTEXT_V2=$(vault write -field=ciphertext transit/rewrap/training-app ciphertext="$CIPHERTEXT_V1")
   411  vault write -field=plaintext transit/decrypt/training-app ciphertext="$CIPHERTEXT_V2" | base64 --decode
   412  history
+
+
+
+
+ 417  export VAULT_ADDR="http://127.0.0.1:8200"
+  418  vault write -f transit/keys/local-autounseal
+  419  cd vault-lab/day3/
+  420  nano autounseal.hcl
+
+  
+  path "transit/encrypt/local-autounseal" {
+        capabilities = ["update"]
+
+}
+
+
+
+path "transit/decrypt/local-autounseal" {
+        capabilities = ["update"]
+
+
+}
+
+  421  clear
+  422  cat autounseal.hcl
+  423  vault policy write local-autounseal.hcl
+  424  vault policy write local-autounseal autounseal.hcl
+  425  vault token create -orphan -policy=local-autounseal -period=24h -field=token > seal-token.txt
+  426  chmod 600 seal-token.txt
+  427  ll
+  428  cat seal-token.txt
+  429  history
