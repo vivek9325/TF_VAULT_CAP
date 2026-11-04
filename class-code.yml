@@ -350,3 +350,26 @@ ubuntu@ip-172-31-23-11:~$
   414  openssl x509 -in root-ca.pem -noout -subject -issuer -dates
   415  history
 
+
+
+
+
+
+ 399  export VAULT_ADDR="http://127.0.0.1:8200"
+  400  vault secrets enable -path=pki-int pki
+  401  vault secrets tune -max-lease-ttl=550h pki-int
+  402  vault write -format=json pki-int/intermediate/generate/internal common_name="Vault training intermediate CA" > intermediate-request.json
+  403  ll
+  404  cat intermediate-request.json
+  405  jq -r '.data.csr' intermediate-request.json > vault-lab/day3/intermediate.csr
+  406  cd vault-lab/day3/
+  407  ll
+  408  cat intermediate.csr
+  409  openssl req -in intermediate.csr -noout -subject
+  410  vault write -format=json pki-root/root/sign-intermediate csr=@intermediate.csr format=pem_bundle ttl=500h > intermediate-signed.json
+  411  ll
+  412  cat intermediate-signed.json
+  413  jq -r '.data.certificate' intermediate-signed.json > intermediate-chain.pem
+  414  cat intermediate-chain.pem
+  415  vault write pki-int/intermediate/set-signed certificate=@intermediate-chain.pem
+  416  history
