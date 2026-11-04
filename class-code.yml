@@ -637,3 +637,15 @@ seal "transit" {
   551  nano autounseal-data/autounseal.hcl
   552  history
 
+
+terminal - 1
+
+ubuntu@ip-172-31-23-11:~$ VAULT_TOKEN="$(cat /home/ubuntu/seal-token.txt)" vault server -config=/home/ubuntu/autounseal-data/autounseal.hcl
+
+terminal - 2
+
+  574  export VAULT_ADDR=http://127.0.0.1:8300
+  575  vault status
+  576  vault operator init -recovery-shares=5 -recovery-threshold=3
+  577  vault status
+  578  history
