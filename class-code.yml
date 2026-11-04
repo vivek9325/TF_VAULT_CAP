@@ -394,3 +394,22 @@ ubuntu@ip-172-31-23-11:~$
   432  openssl verify -CAfile root-ca.pem -untrusted issuing-ca.pem -verify_hostname app.lab.example123 app.pem
   433  history
 ubuntu@ip-172-31-23-11:~/vault-lab/day3$
+
+
+
+
+
+ 398  export VAULT_ADDR="http://127.0.0.1:8200"
+  399  vault secrets enable transit
+  400  vault write -f transit/keys/training-app
+  401  PLAINTEXT_B64=$(printf '%s' 'Customer Account:12345' | base64 -w0)
+  402  echo $PLAINTEXT_B64
+  403  CIPHERTEXT_V1=$(vault write -field=ciphertext transit/encrypt/training-app plaintext="$PLAINTEXT_B64")
+  404  echo $CIPHERTEXT_V1
+  405  vault write -field=plaintext transit/decrypt/training-app ciphertext="$CIPHERTEXT_V1" | base64 --decode
+  406  vault write -f transit/keys/training-app/rotate
+  407  vault write -field=ciphertext transit/encrypt/training-app plaintext="$PLAINTEXT_B64"
+  408  CIPHERTEXT_V2=$(vault write -field=ciphertext transit/encrypt/training-app ciphertext="$CIPHERTEXT_V1")
+  409  CIPHERTEXT_V2=$(vault write -field=ciphertext transit/rewrap/training-app ciphertext="$CIPHERTEXT_V1")
+  411  vault write -field=plaintext transit/decrypt/training-app ciphertext="$CIPHERTEXT_V2" | base64 --decode
+  412  history
