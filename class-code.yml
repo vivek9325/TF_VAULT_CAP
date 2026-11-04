@@ -584,3 +584,56 @@ template {
   566  unset ROLE_ID SECRET_ID
   567  vault agent -config=agent.hcl
   568  history
+
+
+
+ 531  export VAULT_ADDR="http://127.0.0.1:8200"
+  532  SEAL_TOKEN="$(cat seal-token.txt)"
+  533  VAULT_TOKEN="$SEAL_TOKEN" vault token capabilities transit/encrypt/local-autounseal
+  534  VAULT_TOKEN="$SEAL_TOKEN" vault token capabilities transit/decrypt/local-autounseal
+  535  unset SEAL_TOKEN
+  536  nano autounseal.hcl
+
+  
+ui = true
+disable_mlock = true
+
+storage "raft" {
+  path    = "/home/ubuntu/autounseal-data"
+  node_id = "autounseal-lab"
+}
+
+listener "tcp" {
+  address         = "127.0.0.1:8300"
+  cluster_address = "127.0.0.1:8301"
+  tls_disable     = true
+}
+
+api_addr     = "http://127.0.0.1:8300"
+cluster_addr = "http://127.0.0.1:8301"
+
+seal "transit" {
+  address         = "http://127.0.0.1:8200"
+  key_name        = "local-autounseal"
+  mount_path      = "transit/"
+  disable_renewal = false
+}
+
+
+  537  vault read transit/key/local-autounseal
+  538  vault read transit/keys/local-autounseal
+  539  umask 077
+  540  vault token create   -orphan   -policy=local-autounseal   -period=24h   -field=token   > seal-token.txt
+  541  chmod 600 seal-token.txt
+  542  ll
+  543  cat seal-token.txt
+  544  chmod 600 seal-token.txt
+  545  cat autounseal-data/autounseal.hcl
+  546  nano autounseal-data/autounseal.hcl
+  547  cat autounseal-data/autounseal.hcl
+  548  VAULT_TOKEN="$(cat /home/ubuntu/seal-token.txt)" vault server -config=/home/ubuntu/autounseal-data/autounseal.hcl
+  549  cat seal-token.txt
+  550  VAULT_TOKEN="$(cat /home/ubuntu/seal-token.txt)" vault server -config=/home/ubuntu/autounseal-data/autounseal.hcl
+  551  nano autounseal-data/autounseal.hcl
+  552  history
+
