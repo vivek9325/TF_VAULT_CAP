@@ -560,3 +560,27 @@ template {
 }
 
 
+ 545  vault agent -config=agent.hcl
+  546  nano agent.hcl
+  547  vault agent -config=agent.hcl
+  548  ll
+  549  nano agent.hcl
+  550  vault agent -config=agent.hcl
+  551  vault write -f -field=secret_id   auth/approle/role/agent-lab/secret-id   > agent-secret-id.txt
+  552  vault agent -config=agent.hcl
+  553  vault token lookup
+  554  test -s agent-role-id.txt && echo "RoleID Available"
+  555  test -s agent-role-id1.txt && echo "RoleID Available"
+  556  test -s agent-secret-id.txt && echo "RoleID Available"
+  557  vault write auth/approle/role/agent-lab   token_policies="agent-read"   token_ttl="20m"   token_max_ttl="1h"   token_num_uses=0   secret_id_ttl="1h"   secret_id_num_uses=0
+  558  nano agent.hcl
+  559  vault read auth/approle/role/agent-lab
+  560  vault policy read agent-read
+  561  vault agent -config=agent.hcl
+  562  ROLE_ID=$(cat /home/ubuntu/agent-role-id.txt )
+  563  echo $ROLE_ID
+  564  SECRET_ID=$(cat /home/ubuntu/agent-secret-id.txt)
+  565  vault write -format=json auth/approle/login role_id="$ROLE_ID" secret_id="$SECRET_ID" | jq '{policies: .auth.policies, renewable: .auth.renewable}'
+  566  unset ROLE_ID SECRET_ID
+  567  vault agent -config=agent.hcl
+  568  history
