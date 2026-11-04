@@ -453,12 +453,12 @@ ubuntu@ip-172-31-23-11:~/vault-lab/day3$ cd autounseal-data/
 ubuntu@ip-172-31-23-11:~/vault-lab/day3/autounseal-data$ nano autounseal.hcl
 ubuntu@ip-172-31-23-11:~/vault-lab/day3/autounseal-data$ cat autounseal.hcl
 ui = true
-disabled_mlock = true
+disable_mlock = true
 
 storage "raft" {
 
         path = "/home/ubuntu/vault-lab/day3/autounseal-data"
-        node_id = "autounseal-lab
+        node_id = "autounseal-lab"
 
 }
 
