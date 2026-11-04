@@ -422,7 +422,7 @@ ubuntu@ip-172-31-23-11:~/vault-lab/day3$
   419  cd vault-lab/day3/
   420  nano autounseal.hcl
 
-  
+
   path "transit/encrypt/local-autounseal" {
         capabilities = ["update"]
 
@@ -445,3 +445,50 @@ path "transit/decrypt/local-autounseal" {
   427  ll
   428  cat seal-token.txt
   429  history
+
+
+  ubuntu@ip-172-31-23-11:~$ cd vault-lab/day3/
+ubuntu@ip-172-31-23-11:~/vault-lab/day3$ mkdir autounseal-data
+ubuntu@ip-172-31-23-11:~/vault-lab/day3$ cd autounseal-data/
+ubuntu@ip-172-31-23-11:~/vault-lab/day3/autounseal-data$ nano autounseal.hcl
+ubuntu@ip-172-31-23-11:~/vault-lab/day3/autounseal-data$ cat autounseal.hcl
+ui = true
+disabled_mlock = true
+
+storage "raft" {
+
+        path = "/home/ubuntu/vault-lab/day3/autounseal-data"
+        node_id = "autounseal-lab
+
+}
+
+
+listner "tcp" {
+
+        address = "127.0.0.1:8300"
+        cluster_address = "127.0.0.1:8301"
+        tls_disable = true
+
+}
+
+
+api_addr = "http://127.0.0.1:8300"
+cluster_addr = "http://127.0.0.1:8301"
+
+
+seal "transit" {
+
+
+        address = "http://127.0.0.1:8200"
+        key_name = "local-autounseal"
+        mount_path = "transit/"
+        disable_renewal = false
+
+
+
+
+
+
+}
+
+
