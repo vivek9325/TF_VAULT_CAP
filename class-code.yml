@@ -492,3 +492,28 @@ seal "transit" {
 }
 
 
+
+
+
+ 469  export VAULT_ADDR="http://127.0.0.1:8200"
+  470  vault kv put -mount=foundation agent/app username="agent-user" password="AgentDemoPassword1"
+  471  nano agent-read.hcl
+  472  vault auth enable approle
+  473  vault write auth/approle/role/agent-lab token_policies="agent-read" token_ttl="20m" token_max_ttl="1h" token_num_uses=0 secret_id_ttl="1h" secret_id_num_uses=1
+  474  vault read -field=role_id auth/approle/role/agent-lab/secret_id > agent-secret-id.txt
+  475  vault read -field=role_id   auth/approle/role/agent-lab/role-id   > agent-role-id.txt
+  476  vault write -field=secret_id   auth/approle/role/agent-lab/secret-id   > agent-secret-id.txt
+  477  vault write -f -field=secret_id   auth/approle/role/agent-lab/secret-id   > agent-secret-id.txt
+  478  ll
+  479  chmod 600 agent-role-id.txt agent-secret-id.txt
+  480  cat agent-role-id.txt
+  481  cat agent-secret-id.txt
+  482  nano app.ctmpl
+
+  {{- with secret "foundation/data/agent/app" }}
+APP_USERNAME={{ .Data.data.username }}
+APP_PASSWORD={{ .Data.data.password }}
+{{- end }}
+
+
+  483  history
