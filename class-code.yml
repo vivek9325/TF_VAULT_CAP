@@ -330,3 +330,23 @@ ubuntu@ip-172-31-23-11:~$
   339  unset WRAPPED_SECRET_ID WRAPPED_APP_TOKEN
   340  history
 
+
+
+ 399  export VAULT_ADDR="http://127.0.0.1:8200"
+  400  vault status
+  401  cd vault-lab/
+  402  ll
+  403  mkdir day3
+  404  cd day3/
+  405  umask 077
+  406  sudo apt-get update
+  407  sudo apt-get install -y openssl curl jq
+  408  vault secrets enable -path=pki-root pki
+  409  vault secrets tune -max-lease-ttl=500h pki-root
+  410  ll
+  411  vault write -field=certificate pki-root/root/generate/internal common_name="Vault training root CA" ttl=500h > root-ca.pem
+  412  ll
+  413  cat root-ca.pem
+  414  openssl x509 -in root-ca.pem -noout -subject -issuer -dates
+  415  history
+
