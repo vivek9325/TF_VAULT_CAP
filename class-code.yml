@@ -523,3 +523,38 @@ APP_PASSWORD={{ .Data.data.password }}
 
 
   483  history
+
+
+cat > agent.hcl <<EOF
+exit_after_auth = true
+
+vault {
+  address = "http://127.0.0.1:8200"
+}
+
+auto_auth {
+  method "approle" {
+    mount_path = "auth/approle"
+
+    config = {
+      role_id_file_path                   = "$HOME/vault-free-lab/day3/agent-role-id.txt"
+      secret_id_file_path                 = "$HOME/vault-free-lab/day3/agent-secret-id.txt"
+      remove_secret_id_file_after_reading  = true
+    }
+  }
+
+  sink "file" {
+    config = {
+      path = "$HOME/vault-free-lab/day3/agent-token.txt"
+      mode = 0600
+    }
+  }
+}
+
+template {
+  source               = "$HOME/vault-free-lab/day3/app.ctmpl"
+  destination          = "$HOME/vault-free-lab/day3/app.env"
+  perms                = "0600"
+  error_on_missing_key = true
+}
+EOF
